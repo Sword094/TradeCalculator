@@ -29,6 +29,11 @@
 </div>
 
 <style>
+  body {
+    background: #0d0d0d;
+    color: #fff;
+  }
+
   .trade-container {
     display: flex;
     gap: 20px;
@@ -38,44 +43,54 @@
   .player-section {
     flex: 1;
     min-width: 300px;
-    background: #fafafa;
+    background: #1a1a1a;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+  }
+
+  .player-section h2 {
+    color: #ff6600;
+    text-align: center;
+    margin-bottom: 15px;
   }
 
   .pet-search {
     width: 100%;
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 50px;
+    border: 2px solid #ff6600;
+    background: #0d0d0d;
+    color: #fff;
     margin-bottom: 10px;
   }
 
   .suggestions div {
-    background: #eee;
-    padding: 8px;
+    background: #333;
+    padding: 10px;
     margin-top: 2px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 12px;
+    transition: background 0.2s;
   }
 
   .suggestions div:hover {
-    background: #ddd;
+    background: #ff6600;
+    color: #000;
   }
 
   .pet-card {
-    background: #fff;
+    background: #111;
     border-radius: 16px;
     padding: 12px;
     margin: 8px 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(255,102,0,0.2);
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
   .pet-card:hover {
     transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(255,102,0,0.3);
   }
 
   .pet-info {
@@ -89,13 +104,14 @@
     height: 50px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #eee;
+    border: 2px solid #ff6600;
   }
 
   .pet-details {
     display: flex;
     flex-direction: column;
     font-size: 14px;
+    color: #fff;
   }
 
   .quantity-controls {
@@ -105,47 +121,51 @@
   }
 
   .quantity-controls button {
-    background: #ff7043;
+    background: #ff6600;
     border: none;
-    color: white;
+    color: #000;
     font-size: 18px;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 6px 12px;
+    border-radius: 12px;
     cursor: pointer;
     transition: background 0.2s;
   }
 
   .quantity-controls button:hover {
-    background: #ff5722;
+    background: #ffa366;
   }
 
   .reset-btn, .remove-btn {
-    background: #039be5;
+    background: #ff6600;
     border: none;
-    color: white;
+    color: #000;
     font-size: 14px;
-    padding: 6px 10px;
+    padding: 8px 14px;
+    margin-top: 10px;
     margin-left: 8px;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: background 0.2s;
   }
 
-  .reset-btn:hover {
-    background: #0288d1;
+  .reset-btn:hover, .remove-btn:hover {
+    background: #ffa366;
   }
 
   .remove-btn {
-    background: #e53935;
+    background: #ff3300;
   }
 
   .remove-btn:hover {
-    background: #d32f2f;
+    background: #ff7043;
   }
 
   .summary {
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    color: #ff6600;
   }
 </style>
 
