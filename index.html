@@ -112,7 +112,7 @@
 </style>
 
 <script>
-  const sheetUrl = "YOUR_GOOGLE_SHEET_CSV_LINK";
+  const sheetUrl = "YOUR_GOOGLE_SHEET_CSV_LINK"; // Replace with your CSV link
 
   let pets = [];
   const playerData = { a: {}, b: {} };
@@ -137,7 +137,7 @@
     const input = document.getElementById(`search-${side}`);
     const list = document.getElementById(`suggestions-${side}`);
     const query = input.value.toLowerCase();
-    list.innerHTML = "";
+    list.innerHTML = ""; // Clear previous suggestions
 
     if (query.length < 1) return;
 
@@ -146,8 +146,8 @@
       div.textContent = `${pet.name} (${pet.value})`;
       div.onclick = () => {
         addPet(side, pet);
-        input.value = "";
-        list.innerHTML = "";
+        input.value = ""; // Clear input after selection
+        list.innerHTML = ""; // Clear suggestions
       };
       list.appendChild(div);
     });
@@ -214,5 +214,5 @@
     document.getElementById(`search-${side}`).addEventListener("input", () => searchHandler(side));
   });
 
-  fetchSheetData();
+  fetchSheetData(); // Fetch pets from sheet on load
 </script>
