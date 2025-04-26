@@ -117,21 +117,27 @@
   let pets = [];
   const playerData = { a: {}, b: {} };
 
-  function fetchSheetData() {
-    fetch(sheetUrl)
-      .then(res => res.text())
-      .then(csv => {
-        const rows = csv.split("\n").slice(1); // Skip header
-        pets = rows.map(row => {
-          const matches = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-          if (!matches || matches.length < 2) return null;
-          const name = matches[0].replace(/(^"|"$)/g, "").trim();
-          const value = parseFloat(matches[1].replace(/(^"|"$)/g, "").trim());
-          const image = matches[2] ? matches[2].replace(/(^"|"$)/g, "").trim() : "";
-          return { name, value, image };
-        }).filter(p => p && p.name && !isNaN(p.value));
-      });
-  }
+function fetchSheetData() {
+  fetch(sheetUrl)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = csv.split("\n").slice(1); // Skip header
+      pets = rows.map(row => {
+        const matches = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+        if (!matches || matches.length < 2) return null;
+        
+        const name = matches[0] ? matches[0].replace(/^"|"$/g, '').trim() : "";
+        const value = matches[1] ? parseFloat(matches[1].replace(/^"|"$/g, '').trim()) : 0;
+        let image = matches[2] ? matches[2].replace(/^"|"$/g, '').trim() : "";
+
+        // Extra cleanup: remove weird spaces or artifacts
+        image = image.replace(/\s/g, ""); // Remove ALL spaces inside
+        
+        return { name, value, image };
+      }).filter(p => p && p.name && !isNaN(p.value));
+    });
+}
+
 
   function searchHandler(side) {
     const input = document.getElementById(`search-${side}`);
