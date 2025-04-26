@@ -27,139 +27,92 @@
 </div>
 
 <style>
+  /* Styling */
   body {
-    background: #0d0d0d;
-    color: #fff;
+    background-color: #000;
+    color: #FFA500;
   }
-
   .trade-container {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .player-section {
-    flex: 1;
-    min-width: 300px;
-    background: #1a1a1a;
-    border-radius: 16px;
+    justify-content: space-around;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
   }
-
-  .player-section h2 {
-    color: #ff6600;
-    text-align: center;
-    margin-bottom: 15px;
+  .player-section {
+    background: #111;
+    padding: 20px;
+    border-radius: 15px;
+    width: 45%;
   }
-
   .pet-search {
     width: 100%;
     padding: 10px;
-    border-radius: 50px;
-    border: 2px solid #ff6600;
-    background: #0d0d0d;
-    color: #fff;
     margin-bottom: 10px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: #222;
+    color: #FFA500;
   }
-
   .suggestions div {
-    background: #333;
-    padding: 10px;
-    margin-top: 2px;
+    background: #222;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    border-radius: 12px;
-    transition: background 0.2s;
   }
-
-  .suggestions div:hover {
-    background: #ff6600;
-    color: #000;
-  }
-
   .pet-card {
-    background: #111;
-    border-radius: 16px;
-    padding: 12px;
-    margin: 8px 0;
-    box-shadow: 0 2px 8px rgba(255,102,0,0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .pet-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(255,102,0,0.3);
-  }
-
-  .pet-info {
+    background: #222;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: space-between;
+    position: relative; /* For sparkle positioning */
   }
-
-  .pet-info img {
-    width: 50px;
-    height: 50px;
+  .pet-card img {
+    width: 40px;
+    height: 40px;
     object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid #ff6600;
+    margin-right: 10px;
+    border-radius: 50%; /* Circle */
+    border: 2px solid #FFA500; /* Orange border */
   }
-
-  .pet-details {
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-    color: #fff;
-  }
-
-  .quantity-controls {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-
   .quantity-controls button {
-    background: #ff6600;
+    background: #FFA500;
     border: none;
-    color: #000;
-    font-size: 18px;
-    padding: 6px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .quantity-controls button:hover {
-    background: #ffa366;
-  }
-
-  .reset-btn {
-    background: #ff3300;
-    border: none;
-    color: #fff;
-    font-size: 14px;
-    padding: 8px 14px;
-    margin-top: 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .reset-btn:hover {
-    background: #ff7043;
-  }
-
-  .summary {
-    margin-top: 15px;
+    color: black;
     font-weight: bold;
-    text-align: center;
-    font-size: 16px;
-    color: #ff6600;
+    padding: 5px 10px;
+    margin: 0 2px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .reset-btn {
+    background: #FFA500;
+    border: none;
+    padding: 8px 15px;
+    margin-top: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+  }
+
+  /* Sparkle animation */
+  @keyframes sparkle {
+    0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 5px 2px #FFA500; }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px 5px #FFA500; }
+    100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 5px 2px #FFA500; }
+  }
+  .sparkle {
+    animation: sparkle 0.5s ease-in-out;
   }
 </style>
 
 <script>
-  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0db3GrROkEmlUmjUelMK9tjtlKxuWqbjRqXlt5zII5cnHwFPbibA02SNd6KU0G2pT6MLbdb4yzr8l/pub?output=csv";
+  const sheetUrl = "YOUR_GOOGLE_SHEET_CSV_LINK";
 
   let pets = [];
   const playerData = { a: {}, b: {} };
@@ -170,11 +123,11 @@
       .then(csv => {
         const rows = csv.split("\n").slice(1); // Skip header
         pets = rows.map(row => {
-          const [name, value, imageUrl] = row.split(",");
+          const [name, value, image] = row.split(",");
           return { 
             name: name.trim(), 
             value: parseFloat(value.trim()), 
-            image: imageUrl ? imageUrl.trim() : "" 
+            image: image ? image.trim() : "" 
           };
         }).filter(p => p.name && !isNaN(p.value));
       });
@@ -207,6 +160,10 @@
       playerData[side][pet.name].qty++;
     }
     updateDisplay(side);
+    // Add sparkle effect when pet is added
+    const petImage = document.querySelector(`#summary-${side} img`);
+    if (petImage) petImage.classList.add("sparkle");
+    setTimeout(() => petImage.classList.remove("sparkle"), 500); // Remove sparkle after animation
   }
 
   function adjustQty(side, petName, delta) {
@@ -230,11 +187,11 @@
       total += pet.qty * pet.value;
 
       petCard.innerHTML = `
-        <div class="pet-info">
+        <div style="display: flex; align-items: center;">
           ${pet.image ? `<img src="${pet.image}" alt="${pet.name}">` : ""}
-          <div class="pet-details">
-            <strong>${pet.name}</strong>
-            <div>x${pet.qty} • ${pet.value} each</div>
+          <div>
+            <strong>${pet.name}</strong><br>
+            x${pet.qty} • ${pet.value} each
           </div>
         </div>
         <div class="quantity-controls">
