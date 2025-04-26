@@ -9,7 +9,6 @@
       <div class="summary">
         Total: <span id="total-a">0</span>
         <button class="reset-btn" onclick="resetPlayer('a')">Reset</button>
-        <button class="remove-btn" onclick="removeAllPets('a')">Remove All</button>
       </div>
     </div>
 
@@ -22,7 +21,6 @@
       <div class="summary">
         Total: <span id="total-b">0</span>
         <button class="reset-btn" onclick="resetPlayer('b')">Reset</button>
-        <button class="remove-btn" onclick="removeAllPets('b')">Remove All</button>
       </div>
     </div>
   </div>
@@ -135,28 +133,19 @@
     background: #ffa366;
   }
 
-  .reset-btn, .remove-btn {
-    background: #ff6600;
+  .reset-btn {
+    background: #ff3300;
     border: none;
-    color: #000;
+    color: #fff;
     font-size: 14px;
     padding: 8px 14px;
     margin-top: 10px;
-    margin-left: 8px;
     border-radius: 12px;
     cursor: pointer;
     transition: background 0.2s;
   }
 
-  .reset-btn:hover, .remove-btn:hover {
-    background: #ffa366;
-  }
-
-  .remove-btn {
-    background: #ff3300;
-  }
-
-  .remove-btn:hover {
+  .reset-btn:hover {
     background: #ff7043;
   }
 
@@ -260,17 +249,8 @@
   }
 
   function resetPlayer(side) {
-    if (confirm("Are you sure you want to reset Player " + side.toUpperCase() + "?")) {
-      playerData[side] = {};
-      updateDisplay(side);
-    }
-  }
-
-  function removeAllPets(side) {
-    if (confirm("Remove all pets from Player " + side.toUpperCase() + "?")) {
-      playerData[side] = {};
-      updateDisplay(side);
-    }
+    playerData[side] = {};
+    updateDisplay(side);
   }
 
   ['a', 'b'].forEach(side => {
