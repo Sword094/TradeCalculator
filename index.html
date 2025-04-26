@@ -69,15 +69,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative; /* For sparkle positioning */
+    position: relative;
   }
   .pet-card img {
     width: 40px;
     height: 40px;
     object-fit: cover;
     margin-right: 10px;
-    border-radius: 50%; /* Circle */
-    border: 2px solid #FFA500; /* Orange border */
+    border-radius: 50%;
+    border: 2px solid #FFA500;
   }
   .quantity-controls button {
     background: #FFA500;
@@ -112,7 +112,7 @@
 </style>
 
 <script>
-  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0db3GrROkEmlUmjUelMK9tjtlKxuWqbjRqXlt5zII5cnHwFPbibA02SNd6KU0G2pT6MLbdb4yzr8l/pub?output=csv"; // Replace with your CSV link
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0db3GrROkEmlUmjUelMK9tjtlKxuWqbjRqXlt5zII5cnHwFPbibA02SNd6KU0G2pT6MLbdb4yzr8l/pub?output=csv";
 
   let pets = [];
   const playerData = { a: {}, b: {} };
@@ -123,13 +123,13 @@
       .then(csv => {
         const rows = csv.split("\n").slice(1); // Skip header
         pets = rows.map(row => {
-          const [name, value, image] = row.split(",");
-          return { 
-            name: name.trim(), 
-            value: parseFloat(value.trim()), 
-            image: image ? image.trim() : "" 
-          };
-        }).filter(p => p.name && !isNaN(p.value));
+          const matches = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+          if (!matches || matches.length < 2) return null;
+          const name = matches[0].replace(/(^"|"$)/g, "").trim();
+          const value = parseFloat(matches[1].replace(/(^"|"$)/g, "").trim());
+          const image = matches[2] ? matches[2].replace(/(^"|"$)/g, "").trim() : "";
+          return { name, value, image };
+        }).filter(p => p && p.name && !isNaN(p.value));
       });
   }
 
@@ -137,7 +137,7 @@
     const input = document.getElementById(`search-${side}`);
     const list = document.getElementById(`suggestions-${side}`);
     const query = input.value.toLowerCase();
-    list.innerHTML = ""; // Clear previous suggestions
+    list.innerHTML = "";
 
     if (query.length < 1) return;
 
@@ -146,8 +146,8 @@
       div.textContent = `${pet.name} (${pet.value})`;
       div.onclick = () => {
         addPet(side, pet);
-        input.value = ""; // Clear input after selection
-        list.innerHTML = ""; // Clear suggestions
+        input.value = "";
+        list.innerHTML = "";
       };
       list.appendChild(div);
     });
@@ -160,10 +160,10 @@
       playerData[side][pet.name].qty++;
     }
     updateDisplay(side);
-    // Add sparkle effect when pet is added
+
     const petImage = document.querySelector(`#summary-${side} img`);
     if (petImage) petImage.classList.add("sparkle");
-    setTimeout(() => petImage.classList.remove("sparkle"), 500); // Remove sparkle after animation
+    setTimeout(() => petImage.classList.remove("sparkle"), 500);
   }
 
   function adjustQty(side, petName, delta) {
@@ -188,7 +188,7 @@
 
       petCard.innerHTML = `
         <div style="display: flex; align-items: center;">
-          ${pet.image ? `<img src="${pet.image}" alt="${pet.name}">` : ""}
+          ${pet.image ? `<img src="${pet.image}" alt="${pet.name}">` : `<img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No Image">`}
           <div>
             <strong>${pet.name}</strong><br>
             x${pet.qty} • ${pet.value} each
@@ -214,5 +214,5 @@
     document.getElementById(`search-${side}`).addEventListener("input", () => searchHandler(side));
   });
 
-  fetchSheetData(); // Fetch pets from sheet on load
+  fetchSheetData();
 </script>
